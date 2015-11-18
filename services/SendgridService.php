@@ -136,7 +136,7 @@ class SendgridService implements PostProxyService
     {
         return $this->validator($data, [
             'subject' => 'required',
-            'from_email' => 'required',
+            'from_email' => 'required|email',
             'from_name' => 'required',
             'html_template' => 'required',
             'send_at_date' => 'required',

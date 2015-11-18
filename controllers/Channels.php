@@ -30,6 +30,9 @@ class Channels extends Controller
 
     public function onSend($channelId)
     {
+        $data = \Input::get('Channel');
+        $channel = Channel::find($channelId);
+        $channel->update($data);
         Channel::find($channelId)->send();
         return $this->makeRedirect();
     }

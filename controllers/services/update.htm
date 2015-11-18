@@ -1,7 +1,7 @@
 <?php Block::put('breadcrumb') ?>
     <ul>
-        <li><a href="<?= Backend::url('idesigning/postproxy/services') ?>">Services</a></li>
-        <li><?= e($this->pageTitle) ?></li>
+        <li><a href="<?= Backend::url('idesigning/postproxy/services') ?>">Сервисы</a></li>
+        <li>Редактирование сервиса</li>
     </ul>
 <?php Block::endPut() ?>
 
@@ -22,7 +22,7 @@
                     data-hotkey="ctrl+s, cmd+s"
                     data-load-indicator="Saving Service..."
                     class="btn btn-primary">
-                    <u>S</u>ave
+                    Сохранить
                 </button>
                 <button
                     type="button"
@@ -31,7 +31,7 @@
                     data-hotkey="ctrl+enter, cmd+enter"
                     data-load-indicator="Saving Service..."
                     class="btn btn-default">
-                    Save and Close
+                    Сохранить и закрыть
                 </button>
                 <button
                     type="button"
@@ -41,7 +41,7 @@
                     data-request-confirm="Do you really want to delete this service?">
                 </button>
                 <span class="btn-text">
-                    or <a href="<?= Backend::url('idesigning/postproxy/services') ?>">Cancel</a>
+                    <a href="<?= Backend::url('idesigning/postproxy/services') ?>">Отмена</a>
                 </span>
             </div>
         </div>

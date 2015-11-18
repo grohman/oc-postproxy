@@ -39,7 +39,7 @@ class Recipient extends Model
     public $attachOne = [];
     public $attachMany = [];
     protected $rules = [
-        'email' => 'required'
+        'email' => 'required|email'
     ];
     public $attributes = [
         'comment' => 'Добавлен админом'

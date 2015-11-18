@@ -1,0 +1,16 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+recipients:
+    label: ' '
+    emptyMessage: Нет получателей
+    view:
+      toolbarButtons: create|add|remove
+      showSorting: true,
+      showCheckboxes: true,
+      recordsPerPage: 10,
+      list: @/plugins/idesigning/postproxy/models/recipient/columns.yaml
+    manage:
+      list: @/plugins/idesigning/postproxy/models/recipient/columns.yaml
+      form: @/plugins/idesigning/postproxy/models/recipient/fields.yaml

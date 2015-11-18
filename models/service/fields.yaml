@@ -1,0 +1,15 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Название
+        required: true
+    api_name:
+      label: Сервис
+      type: dropdown
+    auth:
+      type: servicesWidget
+      dataAttribute: auth
+      dependsOn: api_name

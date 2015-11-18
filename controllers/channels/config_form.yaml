@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Channel
+
+# Model Form Field configuration
+form: $/idesigning/postproxy/models/channel/fields.yaml
+
+# Model Class name
+modelClass: IDesigning\Postproxy\Models\Channel
+
+# Default redirect location
+defaultRedirect: idesigning/postproxy/channels
+
+# Create page
+create:
+    title: Create Channel
+    redirect: idesigning/postproxy/channels/update/:id
+    redirectClose: idesigning/postproxy/channels
+
+# Update page
+update:
+    title: Edit Channel
+    redirect: idesigning/postproxy/channels
+    redirectClose: idesigning/postproxy/channels
+
+# Preview page
+preview:
+    title: Preview Channel

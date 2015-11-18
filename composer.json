@@ -1,0 +1,18 @@
+{
+  "name": "idesigning/oc-postproxy",
+  "description": "Управление email-рассылками",
+  "keywords": [],
+  "homepage": "https://github.com/grohman",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniel Podrabinek",
+      "email": "danyagrohman@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "sendgrid/sendgrid": "dev-master"
+  },
+  "minimum-stability": "dev"
+}

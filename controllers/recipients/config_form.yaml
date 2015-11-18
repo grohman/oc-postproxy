@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Recipient
+
+# Model Form Field configuration
+form: $/idesigning/postproxy/models/recipient/fields.yaml
+
+# Model Class name
+modelClass: IDesigning\Postproxy\Models\Recipient
+
+# Default redirect location
+defaultRedirect: idesigning/postproxy/recipients
+
+# Create page
+create:
+    title: Create Recipient
+    redirect: idesigning/postproxy/recipients/update/:id
+    redirectClose: idesigning/postproxy/recipients
+
+# Update page
+update:
+    title: Edit Recipient
+    redirect: idesigning/postproxy/recipients
+    redirectClose: idesigning/postproxy/recipients
+
+# Preview page
+preview:
+    title: Preview Recipient

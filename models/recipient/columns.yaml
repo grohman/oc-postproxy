@@ -1,0 +1,13 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    name:
+      label: Имя
+    email:
+      label: Email
+    comment:
+      label: Комментарий
+    created_at:
+      label: Дата создания

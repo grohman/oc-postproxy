@@ -1,0 +1,21 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    name:
+      label: Название
+    api_name:
+      label: Сервис
+    created_at:
+      label: Дата создания
+      type: datetime
+      format: d.m.Y H:i
+    updated_at:
+      label: Дата редактирования
+      invisible: true
+      type: datetime
+      format: d.m.Y H:i

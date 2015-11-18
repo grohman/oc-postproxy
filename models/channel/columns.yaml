@@ -1,0 +1,23 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    name:
+      label: Название
+    service_id:
+      label: Сервис
+      type: partial
+    state:
+      label: Состояние
+    created_at:
+      label: Дата создания
+      type: datetime
+      format: d.m.Y H:i
+    updated_at:
+      label: Дата редактирования
+      type: datetime
+      format: d.m.Y H:i

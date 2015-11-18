@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Service
+
+# Model Form Field configuration
+form: $/idesigning/postproxy/models/service/fields.yaml
+
+# Model Class name
+modelClass: IDesigning\Postproxy\Models\Service
+
+# Default redirect location
+defaultRedirect: idesigning/postproxy/services
+
+# Create page
+create:
+    title: Create Service
+    redirect: idesigning/postproxy/services/update/:id
+    redirectClose: idesigning/postproxy/services
+
+# Update page
+update:
+    title: Edit Service
+    redirect: idesigning/postproxy/services
+    redirectClose: idesigning/postproxy/services
+
+# Preview page
+preview:
+    title: Preview Service

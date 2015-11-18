@@ -1,0 +1,8 @@
+1.0.1:
+  - First version of PostProxy
+1.0.2:
+  - Create tables
+  - create_services_table.php
+  - create_channels_table.php
+  - create_recipients_table.php
+  - create_channel_recipient_pivot_table.php

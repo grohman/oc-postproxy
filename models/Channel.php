@@ -27,6 +27,7 @@ class Channel extends Model
     ];
     public $belongsToMany = [
         'recipients' => [ 'IDesigning\PostProxy\Models\Recipient', 'table' => 'postproxy_channel_recipient' ],
+        'rubrics' => [ 'IDesigning\PostProxy\Models\Rubric', 'table' => 'postproxy_channel_rubric' ],
     ];
     public $attributes = [
         'state' => 'Готово к отправке'
@@ -64,9 +65,24 @@ class Channel extends Model
     {
         $data = $this->toArray();
         $data[ 'options' ] = $this->getAttribute('options');
-        $data[ 'recipients' ] = $this->recipients()->get()->toArray();
+        $recipients = [];
+
+        $this->rubrics()->get()->each(function($rubric) use(&$recipients){
+            $rubric->recipients()->get()->each(function($recipient) use(&$recipients){
+                if(isset($recipients[$recipient->email]) == false) {
+                    $recipients[ $recipient->email ] = $recipient->name;
+                }
+            });
+        });
+
+        $this->recipients()->get()->each(function($recipient) use(&$recipients){
+            if(isset($recipients[$recipient->email]) == false) {
+                $recipients[ $recipient->email ] = $recipient->name;
+            }
+        });
+        $data[ 'recipients' ] = $recipients;
         $data[ 'auth' ] = $this->service()->first()->auth;
-        if (isset($data[ 'recipients' ][ 0 ]) == false) {
+        if (empty($data[ 'recipients' ]) == true) {
             throw new Exception('Не выбраны получатели рассылки');
         }
         $instance = $this->service->getServiceInstance();
@@ -172,7 +188,7 @@ class Channel extends Model
                     $attachIds[] = $newRecipient->id;
                 } else {
                     $attached = $this->recipients()->whereRecipientId($exists->id)->count();
-                    if($attached == 0) {
+                    if ($attached == 0) {
                         $attachIds[] = $exists->id;
                     }
                 }
@@ -181,9 +197,11 @@ class Channel extends Model
             if (isset($attachIds[ 0 ])) {
                 $this->recipients()->attach($attachIds);
             }
+
             return true;
 
         }
+
         return false;
     }
 }

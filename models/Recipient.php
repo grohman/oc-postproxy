@@ -32,7 +32,10 @@ class Recipient extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [];
-    public $belongsToMany = [];
+    public $belongsToMany = [
+        'Channels' => [ 'IDesigning\PostProxy\Models\Channel', 'table' => 'postproxy_channel_recipient' ],
+        'Rubric' => [ 'IDesigning\PostProxy\Models\Rubric', 'table' => 'postproxy_recipient_rubric' ],
+    ];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];
@@ -44,5 +47,12 @@ class Recipient extends Model
     public $attributes = [
         'comment' => 'Добавлен админом'
     ];
+
+    public function filterFields($fields, $context = null)
+    {
+        if($context == 'create' && post('Rubric') != null) {
+            $fields->comment->value = 'Добавлен через рубрику «' . post('Rubric.name') .'»';
+        }
+    }
 
 }

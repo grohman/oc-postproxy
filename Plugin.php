@@ -31,8 +31,9 @@ class Plugin extends PluginBase
     {
         return [
             'postproxy.manage.services' => ['label' => 'Управление сервисами рассылок', 'tab' => 'PostProxy'],
+            'postproxy.manage.rubrics' => ['label' => 'Управление рубриками', 'tab' => 'PostProxy' ],
             'postproxy.manage.recipients' => ['label' => 'Управление получателями рассылок', 'tab' => 'PostProxy'],
-            'postproxy.manage.channels' => ['label' => 'Управление рассылками', 'tab' => 'PostProxy' ]
+            'postproxy.manage.channels' => ['label' => 'Управление рассылками', 'tab' => 'PostProxy' ],
         ];
     }
 
@@ -56,6 +57,12 @@ class Plugin extends PluginBase
                         'icon'        => 'icon-users',
                         'url'         => Backend::url('idesigning/postproxy/recipients'),
                         'permissions' => ['postproxy.manage.recipients']
+                    ],
+                    'rubrics' => [
+                        'label' => 'Рубрики',
+                        'icon' => 'icon-cubes',
+                        'url'         => Backend::url('idesigning/postproxy/rubrics'),
+                        'permissions' => ['postproxy.manage.rubrics']
                     ],
                 ]
 

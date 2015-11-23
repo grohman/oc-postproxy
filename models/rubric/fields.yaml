@@ -1,0 +1,24 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+  name:
+    label: Название
+    span: left
+    attributes:
+      default-focus: 1
+  slug:
+    label: Алиас
+    span: right
+    preset:
+      field: name
+      type: slug
+  channels:
+    label: Рассылки
+    type: relation
+    context: [update]
+  recipients:
+    label: Получатели
+    type: partial
+    context: [update]

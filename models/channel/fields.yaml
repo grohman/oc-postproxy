@@ -13,19 +13,24 @@ fields:
     formAttribute: loadOptionsForm
     dataAttribute: options
     dependsOn: service_id
-  _collectors:
-    label: Сборщики адресов
+  _rubrics:
+    label: Рубрики
     type: section
+  rubrics:
+    type: relation
+    context: [update]
+  _recipients:
+    label: Дополнительные получатели
+    type: section
+    context: [update]
   collectors:
+    label: Сборщики адресов
     type: servicesWidget
     formAttribute: loadCollectorsForm
     dataAttribute: collectors
     context: [update]
-  _recipients:
-    label: Получатели
-    type: section
-    context: [update]
+    dependsOn: rubrics
   recipients:
-    label:
+    label: Список дополнительных получателей
     type: partial
     context: [update]

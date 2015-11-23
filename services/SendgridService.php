@@ -4,6 +4,8 @@ use Carbon\Carbon;
 use Exception;
 use IDesigning\PostProxy\Interfaces\PostProxyService;
 use Illuminate\Support\Facades\Validator;
+use SendGrid;
+use SendGrid\Email;
 
 class SendgridServiceException extends Exception
 {
@@ -172,8 +174,8 @@ class SendgridService implements PostProxyService
     public function send()
     {
         require plugins_path() . '/idesigning/postproxy/vendor/sendgrid/sendgrid/lib/SendGrid.php';
-        $sendgrid = new \SendGrid($this->options[ 'auth' ]);
-        $email = new \SendGrid\Email();
+        $sendgrid = new SendGrid($this->options[ 'auth' ]);
+        $email = new Email();
         $options = $this->options[ 'sendgrid' ];
         $email->setFrom($options[ 'from_email' ])
             ->setFromName($options[ 'from_name' ])
@@ -182,16 +184,16 @@ class SendgridService implements PostProxyService
             ->setText($options[ 'text_template' ])
             ->setHtml($options[ 'html_template' ]);
 
-        foreach ($this->options[ 'recipients' ] as $value) {
-            $email->addSmtpapiTo($value[ 'email' ], $value[ 'name' ]);
+        foreach ($this->options[ 'recipients' ] as $address => $name) {
+            $email->addSmtpapiTo($address, $name);
         }
 
         try {
             $sendgrid->send($email);
+
+            return true;
         } catch(Exception $e) {
             throw new SendgridServiceException($e->getMessage());
         }
-
-        return true;
     }
 }

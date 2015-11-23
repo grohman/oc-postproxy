@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Rubric
+
+# Model Form Field configuration
+form: $/idesigning/postproxy/models/rubric/fields.yaml
+
+# Model Class name
+modelClass: IDesigning\PostProxy\Models\Rubric
+
+# Default redirect location
+defaultRedirect: idesigning/postproxy/rubrics
+
+# Create page
+create:
+    title: Create Rubric
+    redirect: idesigning/postproxy/rubrics/update/:id
+    redirectClose: idesigning/postproxy/rubrics
+
+# Update page
+update:
+    title: Edit Rubric
+    redirect: idesigning/postproxy/rubrics
+    redirectClose: idesigning/postproxy/rubrics
+
+# Preview page
+preview:
+    title: Preview Rubric

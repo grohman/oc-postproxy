@@ -9,3 +9,11 @@
 1.0.3:
   - Add collectors to channels
   - add_collectors_to_channels.php
+1.0.4:
+  - Create Rubric
+  - create_rubrics_table.php
+  - create_recipient_rubric_pivot_table.php
+  - create_channel_rubric_pivot_table.php
+1.0.5:
+  - Run table migrations
+  - add_indexes.php

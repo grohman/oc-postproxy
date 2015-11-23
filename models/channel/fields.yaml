@@ -3,16 +3,29 @@
 # ===================================
 
 fields:
-    name:
-        label: Название
-    service_id:
-      label: Сервис
-      type: dropdown
-    options:
-      type: servicesWidget
-      dataAttribute: options
-      dependsOn: service_id
-    recipients:
-      label: Получатели
-      type: partial
-      context: [update]
+  name:
+    label: Название
+  service_id:
+    label: Сервис
+    type: dropdown
+  options:
+    type: servicesWidget
+    formAttribute: loadOptionsForm
+    dataAttribute: options
+    dependsOn: service_id
+  _collectors:
+    label: Сборщики адресов
+    type: section
+  collectors:
+    type: servicesWidget
+    formAttribute: loadCollectorsForm
+    dataAttribute: collectors
+    context: [update]
+  _recipients:
+    label: Получатели
+    type: section
+    context: [update]
+  recipients:
+    label:
+    type: partial
+    context: [update]

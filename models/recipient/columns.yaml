@@ -11,3 +11,5 @@ columns:
       label: Комментарий
     created_at:
       label: Дата создания
+      type: datetime
+      format: d.m.Y H:i

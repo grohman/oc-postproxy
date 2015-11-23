@@ -6,7 +6,7 @@
 list: $/idesigning/postproxy/models/service/columns.yaml
 
 # Model Class name
-modelClass: IDesigning\Postproxy\Models\Service
+modelClass: IDesigning\PostProxy\Models\Service
 
 # List Title
 title: Manage Services

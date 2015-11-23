@@ -1,7 +1,8 @@
-<?php namespace IDesigning\Postproxy\Controllers;
+<?php namespace IDesigning\PostProxy\Controllers;
 
-use BackendMenu;
 use Backend\Classes\Controller;
+use BackendMenu;
+use Flash;
 use IDesigning\PostProxy\Models\Channel;
 
 /**
@@ -19,7 +20,7 @@ class Channels extends Controller
     public $listConfig = 'config_list.yaml';
     public $relationConfig = 'config_relation.yaml';
 
-    protected $requiredPermissions = ['postproxy.manage.channels'];
+    protected $requiredPermissions = [ 'postproxy.manage.channels' ];
 
     public function __construct()
     {
@@ -33,7 +34,22 @@ class Channels extends Controller
         $data = \Input::get('Channel');
         $channel = Channel::find($channelId);
         $channel->update($data);
-        Channel::find($channelId)->send();
+        $state = $channel->send();
+        Flash::success($state);
+
         return $this->makeRedirect();
+    }
+
+    public function onCollect($channelId)
+    {
+        $data = \Input::get('Channel');
+
+        $channel = Channel::find($channelId);
+        $channel->update($data);
+
+        $collector = urldecode(\Input::get('collector'));
+        $channel->collect($collector);
+        Flash::success('Сбор адресов завершен');
+        return $data;
     }
 }

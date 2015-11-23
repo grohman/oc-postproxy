@@ -6,3 +6,6 @@
   - create_channels_table.php
   - create_recipients_table.php
   - create_channel_recipient_pivot_table.php
+1.0.3:
+  - Add collectors to channels
+  - add_collectors_to_channels.php

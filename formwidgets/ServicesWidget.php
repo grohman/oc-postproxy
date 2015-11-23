@@ -26,6 +26,7 @@ class ServicesWidget extends FormWidgetBase
     public function render()
     {
         $this->prepareVars();
+
         return $this->makePartial('serviceswidget');
     }
 
@@ -34,19 +35,27 @@ class ServicesWidget extends FormWidgetBase
      */
     public function prepareVars()
     {
-        $this->vars['name'] = $this->formField->getName();
-        $this->vars['value'] = $this->getLoadValue();
-        $this->vars['model'] = $this->model;
-        $form = $this->model->loadCustomForm();
+        $this->vars[ 'name' ] = $this->formField->getName();
+        $this->vars[ 'value' ] = $this->getLoadValue();
+        $this->vars[ 'model' ] = $this->model;
+        $formMethod = 'loadCustomForm';
+        if (isset($this->formField->config[ 'formAttribute' ])) {
+            $formMethod = $this->formField->config[ 'formAttribute' ];
+        }
+        $form = $this->model->$formMethod();
+
+        $arrayName = $this->formField->getName();
 
         $config = $this->makeConfig($form);
         $config->model = $this->model;
-        $config->data = $this->model->getAttribute($this->formField->config['dataAttribute']);
-        $config->arrayName = $this->formField->getName();
+        $config->data = $this->model->getAttribute($this->formField->config[ 'dataAttribute' ]);
+        $config->arrayName = $arrayName;
 
-        $this->vars['widget'] = $this->makeWidget('Backend\Widgets\Form', $config);
-        $this->vars['widget']->bindToController();
+        $this->vars[ 'widget' ] = $this->makeWidget('Backend\Widgets\Form', $config);
+        $this->vars[ 'widget' ]->bindToController();
+
     }
+
 
     /**
      * {@inheritDoc}

@@ -1,4 +1,4 @@
-<?php namespace IDesigning\Postproxy\Controllers;
+<?php namespace IDesigning\PostProxy\Controllers;
 
 use BackendMenu;
 use Backend\Classes\Controller;

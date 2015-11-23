@@ -1,10 +1,11 @@
 <?php
 
 return [
-	'services' => env('POSTPROXY_SERVICES', [
-		'sendgrid' => [
-            'label' => 'SendGrid',
-            'class' => 'IDesigning\\PostProxy\\Services\\SendgridService'
-            ]
-	])
+    'services' => [
+        'IDesigning\\PostProxy\\Services\\SendgridService'
+    ],
+    'collectors' => [
+        'IDesigning\\PostProxy\\Collectors\\RainlabUser',
+        'IDesigning\\PostProxy\\Collectors\\PostProxyRecipients',
+    ]
 ];

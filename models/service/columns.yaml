@@ -10,6 +10,7 @@ columns:
       label: Название
     api_name:
       label: Сервис
+      type: partial
     created_at:
       label: Дата создания
       type: datetime

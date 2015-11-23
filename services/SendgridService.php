@@ -1,4 +1,4 @@
-<?php namespace IDesigning\Postproxy\Services;
+<?php namespace IDesigning\PostProxy\Services;
 
 use Carbon\Carbon;
 use Exception;
@@ -13,6 +13,15 @@ class SendgridService implements PostProxyService
 {
 
     protected $options;
+
+
+    /** Возвращает название сервиса
+     * @return mixed
+     */
+    public static function getServiceName()
+    {
+        return 'SendGrid';
+    }
 
     /** Возвращает конфиг формы авторизации в удаленном сервисе
      * @return mixed
@@ -79,7 +88,10 @@ class SendgridService implements PostProxyService
                 ],
                 'html_template' => [
                     'label' => 'Шаблон',
-                    'type' => 'richeditor',
+                    'type' => 'codeeditor',
+                    'mode' => 'split',
+                    'size' => 'huge',
+                    'language' => 'html',
                     'required' => true
                 ],
                 'text_template' => [

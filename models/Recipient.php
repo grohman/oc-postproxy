@@ -24,7 +24,7 @@ class Recipient extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [];
+    protected $fillable = [ 'name', 'email', 'comment' ];
 
     /**
      * @var array Relations

@@ -1,7 +1,7 @@
 <?php namespace IDesigning\PostProxy\Models;
 
 use Exception;
-use Flash;
+use IDesigning\PostProxy\Interfaces\PostProxyCollector;
 use Model;
 use October\Rain\Database\Traits\Validation;
 use Queue;
@@ -38,8 +38,8 @@ class Channel extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [ 'service_id', 'options', 'state' ];
-    protected $jsonable = [ 'options' ];
+    protected $fillable = [ 'service_id', 'options', 'collectors', 'state' ];
+    protected $jsonable = [ 'options', 'collectors' ];
     protected $rules = [
         'name' => 'required',
         'service_id' => 'required',
@@ -77,9 +77,8 @@ class Channel extends Model
         });
         $state = 'Рассылка передана для отправки';
         $this->update([ 'state' => $state ]);
-        Flash::success($state);
 
-        return true;
+        return $state;
     }
 
 
@@ -88,7 +87,7 @@ class Channel extends Model
         return [ '' => 'Не выбран' ] + Service::lists('name', 'id');
     }
 
-    public function loadCustomForm()
+    public function loadOptionsForm()
     {
         if ($this->getAttribute('service_id') == null) {
             return;
@@ -102,11 +101,89 @@ class Channel extends Model
         return;
     }
 
-    public function toJson($options = 0)
+    public function loadCollectorsForm()
     {
-        $data = $this->toArray();
-        $data = [ 'asd' ];
+        $collectors = config()->get('idesigning.postproxy::collectors');
+        if (empty($collectors)) {
+            return [ ];
+        }
 
-        return json_encode($data, $options);
+        $result = [ ];
+        foreach ($collectors as $key => $item) {
+            $instance = new $item;
+            if (($instance instanceof PostProxyCollector) == false) {
+                continue;
+            }
+
+            $result[ $item ] = [
+                'tab' => $instance->getCollectorName(),
+                'type' => 'checkboxlist',
+                'options' => [ ],
+
+
+            ];
+
+            $result[ $item . '_collectButton' ] = [
+                'tab' => $instance->getCollectorName(),
+                'type' => 'partial',
+                'collector' => $item,
+                'path' => '@/plugins/idesigning/postproxy/controllers/channels/_collectbutton.htm'
+            ];
+
+            foreach ($instance->getScopes() as $scopeKey => $value) {
+                $result[ $item ][ 'options' ][ $scopeKey ] = $value[ 'label' ];
+            }
+        }
+
+        return [
+            'secondaryTabs' => [ 'stretch' => true, 'fields' => $result ]
+        ];
+    }
+
+    public function collect($collector)
+    {
+        $instance = null;
+        $scopes = [ ];
+        foreach ($this->collectors as $name => $value) {
+            if ($name == $collector) {
+                $instance = new $collector;
+                if (($instance instanceof PostProxyCollector) == false) {
+                    continue;
+                }
+                if ($value != 0) {
+                    $scopes = $value;
+                }
+                break;
+            }
+
+        }
+
+        if ($instance != null) {
+            $attachIds = [ ];
+            $emails = $instance->collect($scopes);
+            foreach ($emails as $email => $name) {
+                $exists = Recipient::whereEmail($email)->first();
+                if ($exists == null) {
+                    $newRecipient = Recipient::create([
+                        'name' => $name,
+                        'email' => $email,
+                        'comment' => 'Добавлен сборщиком «' . $instance->getCollectorName() . '»'
+                    ]);
+                    $attachIds[] = $newRecipient->id;
+                } else {
+                    $attached = $this->recipients()->whereRecipientId($exists->id)->count();
+                    if($attached == 0) {
+                        $attachIds[] = $exists->id;
+                    }
+                }
+            }
+
+            if (isset($attachIds[ 0 ])) {
+                $this->recipients()->attach($attachIds);
+            }
+            return true;
+
+        }
+        return false;
     }
 }

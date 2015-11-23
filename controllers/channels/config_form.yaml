@@ -9,7 +9,7 @@ name: Channel
 form: $/idesigning/postproxy/models/channel/fields.yaml
 
 # Model Class name
-modelClass: IDesigning\Postproxy\Models\Channel
+modelClass: IDesigning\PostProxy\Models\Channel
 
 # Default redirect location
 defaultRedirect: idesigning/postproxy/channels

@@ -2,6 +2,12 @@
 
 interface PostProxyService
 {
+
+    /** Возвращает название сервиса
+     * @return mixed
+     */
+    public static function getServiceName();
+
     /** Возвращает конфиг формы авторизации в удаленном сервисе
      * @return mixed
      */

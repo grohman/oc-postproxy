@@ -40,6 +40,7 @@ class Service extends Model
         'auth'
     ];
     protected $jsonable = [ 'auth' ];
+    protected $apis = [];
 
     public static function boot()
     {
@@ -53,15 +54,31 @@ class Service extends Model
         });
     }
 
-    public function getApiNameOptions()
+    public function getApiNameOptions($key = null)
     {
-        $servicesArray = [ ];
-        $services = config()->get('idesigning.postproxy::services');
-        foreach ($services as $key => $value) {
-            $servicesArray[ $key ] = $value[ 'label' ];
+        if($this->apis == null) {
+            $servicesArray = [ ];
+            $services = config()->get('idesigning.postproxy::services');
+            foreach ($services as $key => $value) {
+                try {
+                    $servicesArray[ $value ] = $value::getServiceName();
+                } catch(Exception $e) {
+
+                }
+            }
+            $this->apis = [ '' => 'Не выбран' ] + $servicesArray;
         }
 
-        return [ '' => 'Не выбран' ] + $servicesArray;
+        return $this->apis;
+    }
+
+    public function getCurrentApiName()
+    {
+        $apis = $this->getApiNameOptions();
+        if(isset($apis[$this->api_name])) {
+            return $apis[ $this->api_name ];
+        }
+        return '---';
     }
 
     public function loadCustomForm()
@@ -76,17 +93,24 @@ class Service extends Model
     public function getServiceInstance($service = null)
     {
         if (null == $service) {
-            if($this->api_name == null) {
+            if ($this->api_name == null) {
                 return;
             } else {
                 $service = $this->api_name;
             }
         }
 
-        $description = config()->get('idesigning.postproxy::services')[ $service ];
-        $className = $description[ 'class' ];
+        $services = config()->get('idesigning.postproxy::services');
+        $className = null;
+        foreach($services as $configService) {
+            if($configService == $service) {
+                $className = $service;
+                break;
+            }
+        }
         if (class_exists($className) == false) {
-            throw new Exception('Class ' . $className . ' not found');
+            return;
+            //throw new Exception('Class ' . $className . ' not found');
         }
         $instance = new $className;
         if (($instance instanceof PostProxyService) == false) {

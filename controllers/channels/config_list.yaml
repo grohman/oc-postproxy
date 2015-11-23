@@ -6,7 +6,7 @@
 list: $/idesigning/postproxy/models/channel/columns.yaml
 
 # Model Class name
-modelClass: IDesigning\Postproxy\Models\Channel
+modelClass: IDesigning\PostProxy\Models\Channel
 
 # List Title
 title: Manage Channels

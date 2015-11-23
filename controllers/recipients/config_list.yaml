@@ -6,7 +6,7 @@
 list: $/idesigning/postproxy/models/recipient/columns.yaml
 
 # Model Class name
-modelClass: IDesigning\Postproxy\Models\Recipient
+modelClass: IDesigning\PostProxy\Models\Recipient
 
 # List Title
 title: Manage Recipients

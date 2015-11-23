@@ -14,7 +14,7 @@ columns:
     state:
       label: Состояние
     totalRecipientsCount:
-      label: Кол-во подписчиков
+      label: Кол-во получателей
       type: partial
     created_at:
       label: Дата создания

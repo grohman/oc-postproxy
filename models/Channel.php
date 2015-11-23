@@ -61,25 +61,50 @@ class Channel extends Model
         });
     }
 
+    public function getTotalRecipients()
+    {
+        $recipients = [ ];
+        $result = 0;
+        $this->rubrics()->get()->each(function ($rubric) use (&$recipients, &$result) {
+            $rubric->recipients()->get()->each(function ($recipient) use (&$recipients, &$result) {
+                if (isset($recipients[ $recipient->email ]) == false) {
+                    $recipients[ $recipient->email ] = $recipient->name;
+                    $result++;
+                }
+            });
+        });
+
+        $this->recipients()->get()->each(function ($recipient) use (&$recipients, &$result) {
+            if (isset($recipients[ $recipient->email ]) == false) {
+                $recipients[ $recipient->email ] = $recipient->name;
+                //dd($recipient);
+                $result++;
+            }
+        });
+
+        return $result;
+    }
+
     public function send()
     {
         $data = $this->toArray();
         $data[ 'options' ] = $this->getAttribute('options');
-        $recipients = [];
+        $recipients = [ ];
 
-        $this->rubrics()->get()->each(function($rubric) use(&$recipients){
-            $rubric->recipients()->get()->each(function($recipient) use(&$recipients){
-                if(isset($recipients[$recipient->email]) == false) {
+        $this->rubrics()->get()->each(function ($rubric) use (&$recipients) {
+            $rubric->recipients()->get()->each(function ($recipient) use (&$recipients) {
+                if (isset($recipients[ $recipient->email ]) == false) {
                     $recipients[ $recipient->email ] = $recipient->name;
                 }
             });
         });
 
-        $this->recipients()->get()->each(function($recipient) use(&$recipients){
-            if(isset($recipients[$recipient->email]) == false) {
+        $this->recipients()->get()->each(function ($recipient) use (&$recipients) {
+            if (isset($recipients[ $recipient->email ]) == false) {
                 $recipients[ $recipient->email ] = $recipient->name;
             }
         });
+
         $data[ 'recipients' ] = $recipients;
         $data[ 'auth' ] = $this->service()->first()->auth;
         if (empty($data[ 'recipients' ]) == true) {

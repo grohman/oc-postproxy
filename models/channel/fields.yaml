@@ -17,7 +17,7 @@ fields:
     label: Рубрики
     type: section
   rubrics:
-    type: relation
+    type: partial
     context: [update]
   _recipients:
     label: Дополнительные получатели
@@ -29,7 +29,6 @@ fields:
     formAttribute: loadCollectorsForm
     dataAttribute: collectors
     context: [update]
-    dependsOn: rubrics
   recipients:
     label: Список дополнительных получателей
     type: partial

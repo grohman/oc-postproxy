@@ -42,7 +42,7 @@ class Recipient extends Model
     public $attachOne = [];
     public $attachMany = [];
     protected $rules = [
-        'email' => 'required|email'
+        'email' => 'required|email|unique:postproxy_recipients',
     ];
     public $attributes = [
         'comment' => 'Добавлен админом'

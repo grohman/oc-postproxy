@@ -14,3 +14,16 @@ recipients:
     manage:
       list: @/plugins/idesigning/postproxy/models/recipient/columns.yaml
       form: @/plugins/idesigning/postproxy/models/recipient/fields.yaml
+
+rubrics:
+    label: ' '
+    emptyMessage: Рубрики не выбраны
+    view:
+      toolbarButtons: create|add|remove
+      showSorting: true,
+      showCheckboxes: true,
+      recordsPerPage: 10,
+      list: @/plugins/idesigning/postproxy/models/channel/_rubrics_columns.yaml
+    manage:
+      list: @/plugins/idesigning/postproxy/models/rubric/columns.yaml
+      form: @/plugins/idesigning/postproxy/models/rubric/fields.yaml

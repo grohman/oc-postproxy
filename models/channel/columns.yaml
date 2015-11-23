@@ -13,10 +13,14 @@ columns:
       type: partial
     state:
       label: Состояние
+    totalRecipientsCount:
+      label: Кол-во подписчиков
+      type: partial
     created_at:
       label: Дата создания
       type: datetime
       format: d.m.Y H:i
+      invisible: true
     updated_at:
       label: Дата редактирования
       type: datetime

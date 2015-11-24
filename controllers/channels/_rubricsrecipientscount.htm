@@ -1,1 +1,1 @@
-<?= $record->recipients()-where('is_unsubscribed', '=', false)>count() ?>
+<?= $record->recipients()->where('is_unsubscribed', '=', false)->count() ?>

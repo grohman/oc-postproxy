@@ -1,12 +1,14 @@
 <?php namespace IDesigning\PostProxy\Models;
 
 use Model;
+use October\Rain\Database\Traits\Validation;
 
 /**
  * Rubric Model
  */
 class Rubric extends Model
 {
+    use Validation;
 
     /**
      * @var string The database table used by the model.
@@ -35,4 +37,8 @@ class Rubric extends Model
      * @var array Fillable fields
      */
     protected $fillable = [ 'name', 'slug', ];
+    protected $rules = [
+        'name' => 'required',
+        'slug' => 'required',
+    ];
 }

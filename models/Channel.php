@@ -26,7 +26,11 @@ class Channel extends Model
         'service' => [ 'IDesigning\PostProxy\Models\Service' ],
     ];
     public $belongsToMany = [
-        'recipients' => [ 'IDesigning\PostProxy\Models\Recipient', 'table' => 'postproxy_channel_recipient' ],
+        'recipients' => [
+            'IDesigning\PostProxy\Models\Recipient',
+            'table' => 'postproxy_channel_recipient',
+            'pivot' => 'is_unsubscribed'
+        ],
         'rubrics' => [ 'IDesigning\PostProxy\Models\Rubric', 'table' => 'postproxy_channel_rubric' ],
     ];
     public $attributes = [
@@ -67,7 +71,7 @@ class Channel extends Model
         $result = 0;
         $this->rubrics()->get()->each(function ($rubric) use (&$recipients, &$result) {
             $rubric->recipients()->get()->each(function ($recipient) use (&$recipients, &$result) {
-                if (isset($recipients[ $recipient->email ]) == false) {
+                if (isset($recipients[ $recipient->email ]) == false and $recipient->pivot->is_unsubscribed == false) {
                     $recipients[ $recipient->email ] = $recipient->name;
                     $result++;
                 }
@@ -75,9 +79,8 @@ class Channel extends Model
         });
 
         $this->recipients()->get()->each(function ($recipient) use (&$recipients, &$result) {
-            if (isset($recipients[ $recipient->email ]) == false) {
+            if (isset($recipients[ $recipient->email ]) == false and $recipient->pivot->is_unsubscribed == false) {
                 $recipients[ $recipient->email ] = $recipient->name;
-                //dd($recipient);
                 $result++;
             }
         });
@@ -93,14 +96,14 @@ class Channel extends Model
 
         $this->rubrics()->get()->each(function ($rubric) use (&$recipients) {
             $rubric->recipients()->get()->each(function ($recipient) use (&$recipients) {
-                if (isset($recipients[ $recipient->email ]) == false) {
+                if (isset($recipients[ $recipient->email ]) == false and $recipient->pivot->is_unsubscribed == false) {
                     $recipients[ $recipient->email ] = $recipient->name;
                 }
             });
         });
 
         $this->recipients()->get()->each(function ($recipient) use (&$recipients) {
-            if (isset($recipients[ $recipient->email ]) == false) {
+            if (isset($recipients[ $recipient->email ]) == false and $recipient->pivot->is_unsubscribed == false) {
                 $recipients[ $recipient->email ] = $recipient->name;
             }
         });

@@ -5,6 +5,8 @@
 columns:
     name:
       label: Название
+    slug:
+      label: Алиас
     rubricsRecipientsCount:
       label: Кол-во подписчиков
       type: partial

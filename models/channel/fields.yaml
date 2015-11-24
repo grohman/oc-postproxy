@@ -8,6 +8,9 @@ fields:
   service_id:
     label: Сервис
     type: dropdown
+  rubrics:
+    type: partial
+    context: [update]
   options:
     type: servicesWidget
     formAttribute: loadOptionsForm
@@ -16,9 +19,6 @@ fields:
   _rubrics:
     label: Рубрики
     type: section
-  rubrics:
-    type: partial
-    context: [update]
   _recipients:
     label: Дополнительные получатели
     type: section

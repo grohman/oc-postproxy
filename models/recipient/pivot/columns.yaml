@@ -1,0 +1,19 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    name:
+      label: Имя
+    email:
+      label: Email
+    comment:
+      label: Комментарий
+    is_unsubscribed:
+      label: Подписан
+      type: partial
+      path: @/plugins/idesigning/postproxy/controllers/recipients/_is_unsubscribed.htm
+    created_at:
+      label: Дата создания
+      type: datetime
+      format: d.m.Y H:i

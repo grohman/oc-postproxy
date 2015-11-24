@@ -88,6 +88,11 @@ class SendgridService implements PostProxyService
                     'required' => true,
                     'span' => 'right',
                 ],
+                'subtags' => [
+                    'label' => 'Теги',
+                    'type' => 'partial',
+                    'path' => '@/plugins/idesigning/postproxy/services/_sendgrid_subtags.htm',
+                ],
                 'html_template' => [
                     'label' => 'Шаблон',
                     'type' => 'codeeditor',
@@ -184,9 +189,14 @@ class SendgridService implements PostProxyService
             ->setText($options[ 'text_template' ])
             ->setHtml($options[ 'html_template' ]);
 
+        $emails = [];
+        $names = [];
         foreach ($this->options[ 'recipients' ] as $address => $name) {
             $email->addSmtpapiTo($address, $name);
+            $emails[] = $address;
+            $names[] = $name;
         }
+        $email->setSubstitutions(['-email-' => $emails, '-name-' => $names]);
 
         try {
             $sendgrid->send($email);

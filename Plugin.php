@@ -1,6 +1,7 @@
 <?php namespace IDesigning\PostProxy;
 
 use Backend;
+use IDesigning\PostProxy\Models\Recipient;
 use System\Classes\PluginBase;
 
 /**
@@ -17,11 +18,24 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'PostProxy',
+            'name' => 'PostProxy',
             'description' => 'Плагин для управления емейл-рассылками\'',
-            'author'      => 'Daniel Podrabinek',
-            'icon'        => 'icon-leaf'
+            'author' => 'Daniel Podrabinek',
+            'icon' => 'icon-leaf'
         ];
+    }
+
+    public function boot()
+    {
+        if ($this->app->runningInBackend() == false) {
+            if (class_exists('\Grohman\Tattler\Lib\Inject')) {
+                Recipient::extend(function ($model) {
+                    if ($model->isClassExtendedWith('\Grohman\Tattler\Lib\Inject') == false) {
+                        $model->extendClassWith('\Grohman\Tattler\Lib\Inject');
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -30,10 +44,10 @@ class Plugin extends PluginBase
     public function registerPermissions()
     {
         return [
-            'postproxy.manage.services' => ['label' => 'Управление сервисами рассылок', 'tab' => 'PostProxy'],
-            'postproxy.manage.rubrics' => ['label' => 'Управление рубриками', 'tab' => 'PostProxy' ],
-            'postproxy.manage.recipients' => ['label' => 'Управление получателями рассылок', 'tab' => 'PostProxy'],
-            'postproxy.manage.channels' => ['label' => 'Управление рассылками', 'tab' => 'PostProxy' ],
+            'postproxy.manage.services' => [ 'label' => 'Управление сервисами рассылок', 'tab' => 'PostProxy' ],
+            'postproxy.manage.rubrics' => [ 'label' => 'Управление рубриками', 'tab' => 'PostProxy' ],
+            'postproxy.manage.recipients' => [ 'label' => 'Управление получателями рассылок', 'tab' => 'PostProxy' ],
+            'postproxy.manage.channels' => [ 'label' => 'Управление рассылками', 'tab' => 'PostProxy' ],
         ];
     }
 
@@ -41,28 +55,28 @@ class Plugin extends PluginBase
     {
         return [
             'postproxy' => [
-                'label'       => 'Email-рассылки',
-                'url'         => Backend::url('idesigning/postproxy/channels'),
-                'icon'        => 'icon-envelope',
-                'permissions' => ['postproxy.manage.channels'],
+                'label' => 'Email-рассылки',
+                'url' => Backend::url('idesigning/postproxy/channels'),
+                'icon' => 'icon-envelope',
+                'permissions' => [ 'postproxy.manage.channels' ],
                 'sideMenu' => [
                     'channels' => [
-                        'label'       => 'Рассылки',
-                        'icon'        => 'icon-envelope-o',
-                        'url'         => Backend::url('idesigning/postproxy/channels'),
-                        'permissions' => ['postproxy.manage.channels'],
+                        'label' => 'Рассылки',
+                        'icon' => 'icon-envelope-o',
+                        'url' => Backend::url('idesigning/postproxy/channels'),
+                        'permissions' => [ 'postproxy.manage.channels' ],
                     ],
                     'recipients' => [
-                        'label'       => 'Получатели',
-                        'icon'        => 'icon-users',
-                        'url'         => Backend::url('idesigning/postproxy/recipients'),
-                        'permissions' => ['postproxy.manage.recipients']
+                        'label' => 'Получатели',
+                        'icon' => 'icon-users',
+                        'url' => Backend::url('idesigning/postproxy/recipients'),
+                        'permissions' => [ 'postproxy.manage.recipients' ]
                     ],
                     'rubrics' => [
                         'label' => 'Рубрики',
                         'icon' => 'icon-cubes',
-                        'url'         => Backend::url('idesigning/postproxy/rubrics'),
-                        'permissions' => ['postproxy.manage.rubrics']
+                        'url' => Backend::url('idesigning/postproxy/rubrics'),
+                        'permissions' => [ 'postproxy.manage.rubrics' ]
                     ],
                 ]
 
@@ -81,7 +95,7 @@ class Plugin extends PluginBase
                 'url' => Backend::url('idesigning/postproxy/services'),
                 'order' => 500,
                 'keywords' => 'postproxy services',
-                'permissions' => ['postproxy.manage.services']
+                'permissions' => [ 'postproxy.manage.services' ]
             ]
         ];
     }
@@ -91,7 +105,7 @@ class Plugin extends PluginBase
         return [
             'IDesigning\PostProxy\FormWidgets\ServicesWidget' => [
                 'label' => 'Services options',
-                'code'  => 'servicesWidget'
+                'code' => 'servicesWidget'
             ]
         ];
     }

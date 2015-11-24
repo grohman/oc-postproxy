@@ -19,7 +19,7 @@ class Rubric extends Model
     public $hasMany = [ ];
     public $belongsTo = [ ];
     public $belongsToMany = [
-        'recipients' => [ 'IDesigning\PostProxy\Models\Recipient', 'table' => 'postproxy_recipient_rubric' ],
+        'recipients' => [ 'IDesigning\PostProxy\Models\Recipient', 'table' => 'postproxy_recipient_rubric', 'pivot' => 'is_unsubscribed' ],
         'channels' => [ 'IDesigning\PostProxy\Models\Channel', 'table' => 'postproxy_channel_rubric' ],
     ];
     public $morphTo = [ ];

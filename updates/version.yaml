@@ -17,3 +17,6 @@
 1.0.5:
   - Run table migrations
   - add_indexes.php
+1.0.6:
+  - Run table migrations
+  - add_unsubscribed_label.php

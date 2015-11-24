@@ -7,6 +7,6 @@ columns:
       label: Название
     slug:
       label: Алиас
-    recipinetsCount:
+    rubricsRecipientsCount:
       label: Кол-во подписчиков
       type: partial

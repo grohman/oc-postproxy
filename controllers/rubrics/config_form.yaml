@@ -16,13 +16,13 @@ defaultRedirect: idesigning/postproxy/rubrics
 
 # Create page
 create:
-    title: Create Rubric
+    title: Новая рубрика
     redirect: idesigning/postproxy/rubrics/update/:id
     redirectClose: idesigning/postproxy/rubrics
 
 # Update page
 update:
-    title: Edit Rubric
+    title: Редактирование рубрики
     redirect: idesigning/postproxy/rubrics
     redirectClose: idesigning/postproxy/rubrics
 

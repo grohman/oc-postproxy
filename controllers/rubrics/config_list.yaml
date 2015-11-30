@@ -9,7 +9,7 @@ list: $/idesigning/postproxy/models/rubric/columns.yaml
 modelClass: IDesigning\PostProxy\Models\Rubric
 
 # List Title
-title: Manage Rubrics
+title: Управление рубриками
 
 # Link URL for each record
 recordUrl: idesigning/postproxy/rubrics/update/:id

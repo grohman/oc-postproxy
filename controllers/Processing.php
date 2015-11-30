@@ -23,7 +23,7 @@ class Processing extends Controller
                         $recipient = Recipient::create([
                             'email' => $email,
                             'name' => $name,
-                            'comment' => 'Добавился через рубрику «' . $rubric->name . '»',
+                            'comment' => 'Добавился в рубрику «' . $rubric->name . '»',
                         ]);
                     }
                     $exists = $rubric->recipients()->whereRecipientId($recipient->id)->first();

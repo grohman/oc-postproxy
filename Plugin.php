@@ -60,6 +60,12 @@ class Plugin extends PluginBase
                 'icon' => 'icon-envelope',
                 'permissions' => [ 'postproxy.manage.channels' ],
                 'sideMenu' => [
+                    'rubrics' => [
+                        'label' => 'Рубрики',
+                        'icon' => 'icon-cubes',
+                        'url' => Backend::url('idesigning/postproxy/rubrics'),
+                        'permissions' => [ 'postproxy.manage.rubrics' ]
+                    ],
                     'channels' => [
                         'label' => 'Рассылки',
                         'icon' => 'icon-envelope-o',
@@ -72,12 +78,7 @@ class Plugin extends PluginBase
                         'url' => Backend::url('idesigning/postproxy/recipients'),
                         'permissions' => [ 'postproxy.manage.recipients' ]
                     ],
-                    'rubrics' => [
-                        'label' => 'Рубрики',
-                        'icon' => 'icon-cubes',
-                        'url' => Backend::url('idesigning/postproxy/rubrics'),
-                        'permissions' => [ 'postproxy.manage.rubrics' ]
-                    ],
+
                 ]
 
             ]
@@ -107,6 +108,13 @@ class Plugin extends PluginBase
                 'label' => 'Services options',
                 'code' => 'servicesWidget'
             ]
+        ];
+    }
+
+    public function registerComponents()
+    {
+        return [
+            'IDesigning\PostProxy\Components\Subscriber' => 'postproxy_subscriber'
         ];
     }
 }

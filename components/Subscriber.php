@@ -44,7 +44,7 @@ class Subscriber extends ComponentBase
         }
         $name = Input::get('name');
         if ($name == null) {
-            $name = explode('@', $email)[ 0 ];
+            $name = ucfirst(explode('@', $email)[ 0 ]);
         }
         $rubric = Rubric::whereSlug($this->property('rubric'))->first();
         if ($rubric == null) {

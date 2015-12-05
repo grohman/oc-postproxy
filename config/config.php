@@ -1,5 +1,7 @@
 <?php
 
+    // copy to /config/idesigning/postproxy/config.php
+
 return [
     'services' => [
         'IDesigning\\PostProxy\\Services\\SendgridService'

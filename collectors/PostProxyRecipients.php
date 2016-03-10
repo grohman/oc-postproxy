@@ -55,6 +55,6 @@ class PostProxyRecipients implements PostProxyCollector
                 $query = $fn($query);
             }
         }
-        return $query->lists('name', 'email');
+        return $query->get()->lists('name', 'email');
     }
 }

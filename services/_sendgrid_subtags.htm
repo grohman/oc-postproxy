@@ -3,15 +3,18 @@
     <li><b>-email-</b> емейл</li>
 </ul>
 Например: <i>Привет, -name-!</i><br>
-Адреса для отписки: <ul>
-    <li><b>для отписки от этой рассылки: </b><?php
-    echo getenv('APP_URL').'/_idesigning/postproxy/unsubscribe?email=-email-&channel_id='.$formModel->id;
-?>
+Адреса для отписки:
+<ul>
+    <li><b>для отписки от этой рассылки: </b>
+        <?= getenv('APP_URL').'/_idesigning/postproxy/unsubscribe?email=-email-&channel_id='.$formModel->id ?>
     </li>
-    <li><b>для отписки от одной рубрики: </b><?php
-    echo getenv('APP_URL').'/_idesigning/postproxy/unsubscribe?email=-email-&rubrics=rubricSlug';
-        ?></li>
-    <li><b>для отписки от нескольких рубрик: </b><?php
-    echo getenv('APP_URL').'/_idesigning/postproxy/unsubscribe?email=-email-&rubrics[]=rubricSlug1&rubrics[]=rubricSlug2';
-        ?></li>
+
+    <?php if(\BackendAuth::getUser()->hasAccess('postproxy.manage.rubrics') == true): ?>
+    <li><b>для отписки от одной рубрики: </b>
+        <?= getenv('APP_URL').'/_idesigning/postproxy/unsubscribe?email=-email-&rubrics=rubricSlug' ?>
+    </li>
+    <li><b>для отписки от нескольких рубрик: </b>
+        <?= getenv('APP_URL').'/_idesigning/postproxy/unsubscribe?email=-email-&rubrics[]=rubricSlug1&rubrics[]=rubricSlug2' ?>
+    </li>
+    <?php endif ?>
 </ul>

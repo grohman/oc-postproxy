@@ -53,6 +53,9 @@ class Plugin extends PluginBase
 
     public function registerNavigation()
     {
+        if(config()->get('idesigning.postproxy::navigationTab') == false){
+            return;
+        }
         return [
             'postproxy' => [
                 'label' => 'Email-рассылки',

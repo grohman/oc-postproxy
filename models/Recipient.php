@@ -41,7 +41,7 @@ class Recipient extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
-    public $rules = [
+    protected $rules = [
         'email' => 'required|email|unique:postproxy_recipients',
     ];
     public $attributes = [

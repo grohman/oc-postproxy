@@ -1,7 +1,1 @@
-<?php
-if (\BackendAuth::getUser()->hasAccess('postproxy.manage.rubrics') == false) {
-    echo $this->relationRenderView('recipients');
-} else {
-    echo $this->relationRender('recipients');
-}
-?>
+<?= $this->relationRender('recipients') ?>

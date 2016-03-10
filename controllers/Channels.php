@@ -64,7 +64,10 @@ class Channels extends Controller
         $collector = urldecode(post('collector'));
         $channel->collect($collector);
         Flash::success('Сбор адресов завершен');
-        return $data;
+
+        $relationCtrl = $this->getClassExtension('Backend\Behaviors\RelationController');
+        $relationCtrl->initRelation($channel, 'recipients');
+        return $relationCtrl->relationRefresh('recipients');
     }
 
     public function listExtendColumns($list)

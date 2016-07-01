@@ -10,7 +10,7 @@ recipients:
       showSorting: true,
       showCheckboxes: true,
       recordsPerPage: 10,
-      list: @/plugins/idesigning/postproxy/models/recipient/pivot/columns.yaml
+      list: $/idesigning/postproxy/models/recipient/pivot/columns.yaml
     manage:
-      list: @/plugins/idesigning/postproxy/models/recipient/columns.yaml
-      form: @/plugins/idesigning/postproxy/models/recipient/fields.yaml
+      list: $/idesigning/postproxy/models/recipient/columns.yaml
+      form: $/idesigning/postproxy/models/recipient/fields.yaml

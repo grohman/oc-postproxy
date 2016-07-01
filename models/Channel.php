@@ -2,9 +2,9 @@
 
 use Exception;
 use IDesigning\PostProxy\Interfaces\PostProxyCollector;
-use Model;
+use Illuminate\Support\Facades\Queue;
+use October\Rain\Database\Model;
 use October\Rain\Database\Traits\Validation;
-use Queue;
 
 /**
  * Channel Model
@@ -22,40 +22,58 @@ class Channel extends Model
      */
     public $hasMany = [
     ];
+    /**
+     * @var array
+     */
     public $belongsTo = [
-        'service' => [ 'IDesigning\PostProxy\Models\Service' ],
+        'service' => ['IDesigning\PostProxy\Models\Service'],
     ];
+    /**
+     * @var array
+     */
     public $belongsToMany = [
         'recipients' => [
             'IDesigning\PostProxy\Models\Recipient',
             'table' => 'postproxy_channel_recipient',
-            'pivot' => 'is_unsubscribed'
+            'pivot' => 'is_unsubscribed',
         ],
-        'rubrics' => [ 'IDesigning\PostProxy\Models\Rubric', 'table' => 'postproxy_channel_rubric' ],
+        'rubrics'    => ['IDesigning\PostProxy\Models\Rubric', 'table' => 'postproxy_channel_rubric'],
     ];
+    /**
+     * @var array
+     */
     public $attributes = [
-        'state' => 'Готово к отправке'
+        'state' => 'Готово к отправке',
     ];
     /**
      * @var array Guarded fields
      */
-    protected $guarded = [ '*' ];
+    protected $guarded = ['*'];
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [ 'service_id', 'options', 'collectors', 'state' ];
-    protected $jsonable = [ 'options', 'collectors' ];
+    protected $fillable = ['service_id', 'options', 'collectors', 'state'];
+    /**
+     * @var array
+     */
+    protected $jsonable = ['options', 'collectors'];
+    /**
+     * @var array
+     */
     protected $rules = [
-        'name' => 'required',
+        'name'       => 'required',
         'service_id' => 'required',
     ];
 
+    /**
+     *
+     */
     public static function boot()
     {
         parent::boot();
         static::saving(function ($model) {
             if ($model->getAttribute('service_id') == null) {
-                return;
+                return false;
             }
 
             $instance = $model->service->getServiceInstance();
@@ -65,22 +83,25 @@ class Channel extends Model
         });
     }
 
+    /**
+     * @return int
+     */
     public function getTotalRecipients()
     {
-        $recipients = [ ];
+        $recipients = [];
         $result = 0;
         $this->rubrics()->get()->each(function ($rubric) use (&$recipients, &$result) {
             $rubric->recipients()->get()->each(function ($recipient) use (&$recipients, &$result) {
-                if (isset($recipients[ $recipient->email ]) == false and $recipient->pivot->is_unsubscribed == false) {
-                    $recipients[ $recipient->email ] = $recipient->name;
+                if (isset($recipients[$recipient->email]) == false and $recipient->pivot->is_unsubscribed == false) {
+                    $recipients[$recipient->email] = $recipient->name;
                     $result++;
                 }
             });
         });
 
         $this->recipients()->get()->each(function ($recipient) use (&$recipients, &$result) {
-            if (isset($recipients[ $recipient->email ]) == false and $recipient->pivot->is_unsubscribed == false) {
-                $recipients[ $recipient->email ] = $recipient->name;
+            if (isset($recipients[$recipient->email]) == false and $recipient->pivot->is_unsubscribed == false) {
+                $recipients[$recipient->email] = $recipient->name;
                 $result++;
             }
         });
@@ -88,29 +109,33 @@ class Channel extends Model
         return $result;
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function send()
     {
         $data = $this->toArray();
-        $data[ 'options' ] = $this->getAttribute('options');
-        $recipients = [ ];
+        $data['options'] = $this->getAttribute('options');
+        $recipients = [];
 
         $this->rubrics()->get()->each(function ($rubric) use (&$recipients) {
             $rubric->recipients()->get()->each(function ($recipient) use (&$recipients) {
-                if (isset($recipients[ $recipient->email ]) == false and $recipient->pivot->is_unsubscribed == false) {
-                    $recipients[ $recipient->email ] = $recipient->name;
+                if (isset($recipients[$recipient->email]) == false and $recipient->pivot->is_unsubscribed == false) {
+                    $recipients[$recipient->email] = $recipient->name;
                 }
             });
         });
 
         $this->recipients()->get()->each(function ($recipient) use (&$recipients) {
-            if (isset($recipients[ $recipient->email ]) == false and $recipient->pivot->is_unsubscribed == false) {
-                $recipients[ $recipient->email ] = $recipient->name;
+            if (isset($recipients[$recipient->email]) == false and $recipient->pivot->is_unsubscribed == false) {
+                $recipients[$recipient->email] = $recipient->name;
             }
         });
 
-        $data[ 'recipients' ] = $recipients;
-        $data[ 'auth' ] = $this->service()->first()->auth;
-        if (empty($data[ 'recipients' ]) == true) {
+        $data['recipients'] = $recipients;
+        $data['auth'] = $this->service()->first()->auth;
+        if (empty($data['recipients']) == true) {
             throw new Exception('Не выбраны получатели рассылки');
         }
         $instance = $this->service->getServiceInstance();
@@ -120,17 +145,23 @@ class Channel extends Model
             $job->delete();
         });
         $state = 'Рассылка передана для отправки';
-        $this->update([ 'state' => $state ]);
+        $this->update(['state' => $state]);
 
         return $state;
     }
 
 
+    /**
+     * @return array
+     */
     public function getServiceIdOptions()
     {
-        return [ '' => 'Не выбран' ] + Service::lists('name', 'id');
+        return ['' => 'Не выбран'] + Service::lists('name', 'id');
     }
 
+    /**
+     *
+     */
     public function loadOptionsForm()
     {
         if ($this->getAttribute('service_id') == null) {
@@ -145,49 +176,61 @@ class Channel extends Model
         return;
     }
 
+    /**
+     * @return array
+     */
     public function loadCollectorsForm()
     {
         $collectors = config()->get('idesigning.postproxy::collectors');
         if (empty($collectors)) {
-            return [ ];
+            return [];
         }
 
-        $result = [ ];
+        $result = [];
         foreach ($collectors as $key => $item) {
-            $instance = new $item;
+            try {
+                $instance = new $item;
+            } catch (Exception $e) {
+                continue;
+            }
+            
             if (($instance instanceof PostProxyCollector) == false) {
                 continue;
             }
 
-            $result[ $item ] = [
-                'tab' => $instance->getCollectorName(),
-                'type' => 'checkboxlist',
-                'options' => [ ],
+            $result[$item] = [
+                'tab'     => $instance->getCollectorName(),
+                'type'    => 'checkboxlist',
+                'options' => [],
 
 
             ];
 
-            $result[ $item . '_collectButton' ] = [
-                'tab' => $instance->getCollectorName(),
-                'type' => 'partial',
+            $result[$item . '_collectButton'] = [
+                'tab'       => $instance->getCollectorName(),
+                'type'      => 'partial',
                 'collector' => $item,
-                'path' => '@/plugins/idesigning/postproxy/controllers/channels/_collectbutton.htm'
+                'path'      => '$/idesigning/postproxy/controllers/channels/_collectbutton.htm',
             ];
 
             foreach ($instance->getScopes() as $scopeKey => $value) {
-                $result[ $item ][ 'options' ][ $scopeKey ] = $value[ 'label' ];
+                $result[$item]['options'][$scopeKey] = $value['label'];
             }
         }
 
         return [
-            'secondaryTabs' => [ 'stretch' => true, 'fields' => $result ]
+            'secondaryTabs' => ['stretch' => true, 'fields' => $result],
         ];
     }
 
+    /**
+     * @param $collector
+     * @return bool
+     */
     public function collect($collector)
     {
         $instance = null;
-        $scopes = [ ];
+        $scopes = [];
         foreach ($this->collectors as $name => $value) {
             if ($name == $collector) {
                 $instance = new $collector;
@@ -203,15 +246,15 @@ class Channel extends Model
         }
 
         if ($instance != null) {
-            $attachIds = [ ];
+            $attachIds = [];
             $emails = $instance->collect($scopes);
             foreach ($emails as $email => $name) {
                 $exists = Recipient::whereEmail($email)->first();
                 if ($exists == null) {
                     $newRecipient = Recipient::create([
-                        'name' => $name,
-                        'email' => $email,
-                        'comment' => 'Добавлен сборщиком «' . $instance->getCollectorName() . '»'
+                        'name'    => $name,
+                        'email'   => $email,
+                        'comment' => 'Добавлен сборщиком «' . $instance->getCollectorName() . '»',
                     ]);
                     $attachIds[] = $newRecipient->id;
                 } else {
@@ -222,7 +265,7 @@ class Channel extends Model
                 }
             }
 
-            if (isset($attachIds[ 0 ])) {
+            if (isset($attachIds[0])) {
                 $this->recipients()->attach($attachIds);
             }
 

@@ -2,7 +2,7 @@
 
 use Exception;
 use IDesigning\PostProxy\Interfaces\PostProxyService;
-use Model;
+use October\Rain\Database\Model;
 use October\Rain\Database\Traits\Validation;
 
 /**
@@ -10,7 +10,6 @@ use October\Rain\Database\Traits\Validation;
  */
 class Service extends Model
 {
-
     use Validation;
 
     /**
@@ -21,27 +20,39 @@ class Service extends Model
      * @var array Relations
      */
     public $hasMany = [
-        'channels' => [ 'IDesigning\PostProxy\Models\Channel' ],
+        'channels' => ['IDesigning\PostProxy\Models\Channel'],
     ];
+    /**
+     * @var array
+     */
     protected $rules = [
-        'name' => 'required',
+        'name'     => 'required',
         'api_name' => 'required',
     ];
     /**
      * @var array Guarded fields
      */
-    protected $guarded = [ '*' ];
+    protected $guarded = ['*'];
     /**
      * @var array Fillable fields
      */
     protected $fillable = [
         'name',
         'api_name',
-        'auth'
+        'auth',
     ];
-    protected $jsonable = [ 'auth' ];
+    /**
+     * @var array
+     */
+    protected $jsonable = ['auth'];
+    /**
+     * @var array
+     */
     protected $apis = [];
 
+    /**
+     *
+     */
     public static function boot()
     {
         parent::boot();
@@ -54,33 +65,44 @@ class Service extends Model
         });
     }
 
+    /**
+     * @return mixed|string
+     */
+    public function getCurrentApiName()
+    {
+        $apis = $this->getApiNameOptions();
+        if (isset($apis[$this->api_name])) {
+            return $apis[$this->api_name];
+        }
+        return '---';
+    }
+
+    /**
+     * @param null $key
+     * @return array
+     */
     public function getApiNameOptions($key = null)
     {
-        if($this->apis == null) {
-            $servicesArray = [ ];
+        if ($this->apis == null) {
+            $servicesArray = [];
             $services = config()->get('idesigning.postproxy::services');
             foreach ($services as $key => $value) {
                 try {
-                    $servicesArray[ $value ] = $value::getServiceName();
-                } catch(Exception $e) {
+                    $servicesArray[$value] = $value::getServiceName();
+                } catch (Exception $e) {
 
                 }
             }
-            $this->apis = [ '' => 'Не выбран' ] + $servicesArray;
+            $this->apis = ['' => 'Не выбран'] + $servicesArray;
         }
 
         return $this->apis;
     }
 
-    public function getCurrentApiName()
-    {
-        $apis = $this->getApiNameOptions();
-        if(isset($apis[$this->api_name])) {
-            return $apis[ $this->api_name ];
-        }
-        return '---';
-    }
-
+    /**
+     * @return mixed
+     * @throws Exception
+     */
     public function loadCustomForm()
     {
         $service = $this->getAttribute('api_name');
@@ -90,6 +112,10 @@ class Service extends Model
         }
     }
 
+    /**
+     * @param null $service
+     * @throws Exception
+     */
     public function getServiceInstance($service = null)
     {
         if (null == $service) {
@@ -102,15 +128,14 @@ class Service extends Model
 
         $services = config()->get('idesigning.postproxy::services');
         $className = null;
-        foreach($services as $configService) {
-            if($configService == $service) {
+        foreach ($services as $configService) {
+            if ($configService == $service) {
                 $className = $service;
                 break;
             }
         }
         if (class_exists($className) == false) {
             return;
-            //throw new Exception('Class ' . $className . ' not found');
         }
         $instance = new $className;
         if (($instance instanceof PostProxyService) == false) {

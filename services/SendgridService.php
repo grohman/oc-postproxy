@@ -91,7 +91,7 @@ class SendgridService implements PostProxyService
                 'subtags' => [
                     'label' => 'Теги',
                     'type' => 'partial',
-                    'path' => '@/plugins/idesigning/postproxy/services/_sendgrid_subtags.htm',
+                    'path' => '$/idesigning/postproxy/services/_sendgrid_subtags.htm',
                 ],
                 'html_template' => [
                     'label' => 'Шаблон',

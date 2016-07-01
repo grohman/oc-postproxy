@@ -1,6 +1,6 @@
 <?php namespace IDesigning\PostProxy\Models;
 
-use Model;
+use October\Rain\Database\Model;
 use October\Rain\Database\Traits\Validation;
 
 /**
@@ -30,24 +30,58 @@ class Recipient extends Model
      * @var array Relations
      */
     public $hasOne = [];
+    /**
+     * @var array
+     */
     public $hasMany = [];
+    /**
+     * @var array
+     */
     public $belongsTo = [];
+    /**
+     * @var array
+     */
     public $belongsToMany = [
         'Channels' => [ 'IDesigning\PostProxy\Models\Channel', 'table' => 'postproxy_channel_recipient' ],
         'Rubric' => [ 'IDesigning\PostProxy\Models\Rubric', 'table' => 'postproxy_recipient_rubric' ],
     ];
+    /**
+     * @var array
+     */
     public $morphTo = [];
+    /**
+     * @var array
+     */
     public $morphOne = [];
+    /**
+     * @var array
+     */
     public $morphMany = [];
+    /**
+     * @var array
+     */
     public $attachOne = [];
+    /**
+     * @var array
+     */
     public $attachMany = [];
+    /**
+     * @var array
+     */
     protected $rules = [
         'email' => 'required|email|unique:postproxy_recipients',
     ];
+    /**
+     * @var array
+     */
     public $attributes = [
         'comment' => 'Добавлен админом'
     ];
 
+    /**
+     * @param      $fields
+     * @param null $context
+     */
     public function filterFields($fields, $context = null)
     {
         if($context == 'create' && post('Rubric') != null) {

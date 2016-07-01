@@ -1,6 +1,5 @@
 <?php namespace IDesigning\PostProxy\Collectors;
 
-use Carbon\Carbon;
 use IDesigning\PostProxy\Interfaces\PostProxyCollector;
 use IDesigning\PostProxy\Models\Recipient;
 
@@ -15,6 +14,22 @@ class PostProxyRecipients implements PostProxyCollector
         return 'Все получатели';
     }
 
+    /** Возвращает емейлы с именами
+     * @param array $scopes
+     * @return mixed
+     */
+    public function collect(Array $scopes = [])
+    {
+        $query = Recipient::select('name', 'email');
+        if (isset($scopes[0])) {
+            foreach ($scopes as $scope) {
+                $fn = $this->getScopes()[$scope]['scope'];
+                $query = $fn($query);
+            }
+        }
+        return $query->get()->lists('name', 'email');
+    }
+
     /** Возвращает массив условий для поиска
      * @return mixed
      */
@@ -23,38 +38,22 @@ class PostProxyRecipients implements PostProxyCollector
 
         $comments = Recipient::distinct()->select('comment')->lists('comment');
         $result = [];
-        foreach($comments as $comment){
+        foreach ($comments as $comment) {
             $result[$comment] = [
                 'label' => $comment,
-                'scope' => function($query) use($comment) {
+                'scope' => function ($query) use ($comment) {
                     return $query->where('comment', '=', $comment);
-                }
+                },
             ];
         }
-        if(empty($result)) {
+        if (empty($result)) {
             $result[] = [
                 'label' => 'Все',
-                'scope' => function($query){
+                'scope' => function ($query) {
                     return $query;
-                }
+                },
             ];
         }
         return $result;
-    }
-
-    /** Возвращает емейлы с именами
-     * @param array $scopes
-     * @return mixed
-     */
-    public function collect(Array $scopes = [ ])
-    {
-        $query = Recipient::select('name', 'email');
-        if(isset($scopes[0])) {
-            foreach($scopes as $scope) {
-                $fn = $this->getScopes()[$scope]['scope'];
-                $query = $fn($query);
-            }
-        }
-        return $query->get()->lists('name', 'email');
     }
 }

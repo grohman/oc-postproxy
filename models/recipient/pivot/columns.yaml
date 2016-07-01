@@ -11,8 +11,7 @@ columns:
       label: Комментарий
     is_unsubscribed:
       label: Подписан
-      type: partial
-      path: @/plugins/idesigning/postproxy/controllers/recipients/_is_unsubscribed.htm
+      type: switch
     created_at:
       label: Дата создания
       type: datetime

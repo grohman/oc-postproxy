@@ -1,6 +1,6 @@
 <?php namespace IDesigning\PostProxy\Models;
 
-use Model;
+use October\Rain\Database\Model;
 use October\Rain\Database\Traits\Validation;
 
 /**
@@ -17,26 +17,53 @@ class Rubric extends Model
     /**
      * @var array Relations
      */
-    public $hasOne = [ ];
-    public $hasMany = [ ];
-    public $belongsTo = [ ];
+    public $hasOne = [];
+    /**
+     * @var array
+     */
+    public $hasMany = [];
+    /**
+     * @var array
+     */
+    public $belongsTo = [];
+    /**
+     * @var array
+     */
     public $belongsToMany = [
-        'recipients' => [ 'IDesigning\PostProxy\Models\Recipient', 'table' => 'postproxy_recipient_rubric', 'pivot' => 'is_unsubscribed' ],
-        'channels' => [ 'IDesigning\PostProxy\Models\Channel', 'table' => 'postproxy_channel_rubric' ],
+        'recipients' => ['IDesigning\PostProxy\Models\Recipient', 'table' => 'postproxy_recipient_rubric', 'pivot' => 'is_unsubscribed'],
+        'channels'   => ['IDesigning\PostProxy\Models\Channel', 'table' => 'postproxy_channel_rubric'],
     ];
-    public $morphTo = [ ];
-    public $morphOne = [ ];
-    public $morphMany = [ ];
-    public $attachOne = [ ];
-    public $attachMany = [ ];
+    /**
+     * @var array
+     */
+    public $morphTo = [];
+    /**
+     * @var array
+     */
+    public $morphOne = [];
+    /**
+     * @var array
+     */
+    public $morphMany = [];
+    /**
+     * @var array
+     */
+    public $attachOne = [];
+    /**
+     * @var array
+     */
+    public $attachMany = [];
     /**
      * @var array Guarded fields
      */
-    protected $guarded = [ '*' ];
+    protected $guarded = ['*'];
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [ 'name', 'slug', ];
+    protected $fillable = ['name', 'slug',];
+    /**
+     * @var array
+     */
     protected $rules = [
         'name' => 'required',
         'slug' => 'required',
